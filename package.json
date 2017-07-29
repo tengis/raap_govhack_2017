@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/tengis/raap_govhack_2017#readme",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "cors": "^2.8.4",
     "express": "^4.15.3"
   }
