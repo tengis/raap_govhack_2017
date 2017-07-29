@@ -38,7 +38,21 @@ app.post("/event", function(req, res) {
       slackEventDetails.event.channel,
       slackEventDetails.event.text
     );
+
+    chatStates.postInteractiveStateMessage(
+      0,
+      slackEventDetails.event.user,
+      slackEventDetails.event.channel,
+      "Hey " + user + " "
+    );
+  } else {
+    console.log("we should post the cancel form and reset life.");
   }
+});
+
+app.post("/interactive", function(req, res) {
+  const details = req.body;
+  if (details.user) console.log("the interactive message details", details);
 });
 
 app.listen(3000, "0.0.0.0", function() {
