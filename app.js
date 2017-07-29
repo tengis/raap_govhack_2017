@@ -41,6 +41,11 @@ app.post("/event", function(req, res) {
   }
 });
 
+app.post("/interactive", function(req, res) {
+  const details = req.body;
+  console.log("the interactive message details", details);
+});
+
 app.listen(3000, "0.0.0.0", function() {
   console.log("Example app listening on port 3000!");
 });
