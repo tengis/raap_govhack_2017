@@ -25,6 +25,7 @@ app.post("/event", function(req, res) {
   console.log("event details", slackEventDetails);
   if (
     slackEventDetails.event &&
+    !slackEventDetails.event.bot_id &&
     slackEventDetails.event.user &&
     !(slackEventDetails.event.user in slackState)
   ) {
