@@ -221,11 +221,21 @@ function postErrorStateMessage(state, user, channel) {
   const errorTemplate = {
     fallback: "You don't know what to do?",
     callback_id: user + ":done:done",
-    color: "#3AA3E3",
+    color: "#f44141",
     attachment_type: "default",
-    text: "Hey to meet this accreditation you'll require the following:"
+    text:
+      "Sorry unfortunatley you require this accreditation. \n\nPlease view here for details to apply:\n  https://ablis.business.gov.au/AG/resource/AP242.pdf "
   };
-  return slackApi.postMessage("", channel, [errorTemplate]);
+
+  const furtherInformation = {
+    color: "#f4bb41",
+    fallback: "You don't know what to do?",
+    callback_id: user + ":done:done",
+    attachment_type: "default",
+    text:
+      "For an overview and further details please see the following : \n https://www.mla.com.au/globalassets/mla-corporate/blocks/research-and-development/34007_mla_eu-cattle-tt_vfa2_webv2.pdf "
+  };
+  return slackApi.postMessage("", channel, [errorTemplate, furtherInformation]);
 }
 
 exports.handler = (event, context, callback) => {
@@ -235,7 +245,9 @@ exports.handler = (event, context, callback) => {
       0,
       event.user_name,
       event.channel_id,
-      "Hey " + event.user_name + " i'll be more than happy to assist."
+      "Hey " +
+        event.user_name +
+        " Looks like you may be eligible for the EUCAS Accredittion which will allow you to export your cattle to the EU."
     ).then(() => {
       callback();
     });
