@@ -210,7 +210,7 @@ function updatePreviousState(previousState, value) {
     case "more":
       return details.checkList + " too heavy :x:";
     case "300-350":
-      return details.checkList + "valid :white_check_mark:";
+      return details.checkList + " valid :white_check_mark:";
     default:
       return;
   }
