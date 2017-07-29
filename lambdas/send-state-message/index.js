@@ -124,7 +124,6 @@ const possibleStates = {
 
 function generateQuestionPrompt(state, user) {
   const currentState = possibleStates[state];
-  console.log("here is our current state", currentState);
   let baseTemplate = {
     fallback: "You don't know what to do?",
     callback_id: user + ":" + state + ":" + currentState.nextState,
@@ -247,15 +246,13 @@ exports.handler = (event, context, callback) => {
       event.channel_id,
       "Hey " +
         event.user_name +
-        " Looks like you may be eligible for the EUCAS Accredittion which will allow you to export your cattle to the EU."
+        " Looks like you may be eligible for the EUCAS Accreditation which will allow you to export your cattle to the EU."
     ).then(() => {
       callback();
     });
   } else {
-    console.log("we have been transfered here with the payload", event);
     const payLoadSections = event.callback_id.split(":");
     if (payLoadSections.length === 1) {
-      console.log("finishing state.");
       callback();
     } else {
       const previousState = payLoadSections[1];
