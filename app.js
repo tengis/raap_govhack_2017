@@ -18,9 +18,10 @@ app.post("/slackEntry", function(req, res) {
 
 app.post("/event", function(req, res) {
   console.log("we have entered into the slack entry.", req.body);
+  const slackEventDetails = req.body;
   res.send(
     JSON.stringify({
-      challenge: body.challenge
+      challenge: slackEventDetails.challenge
     })
   );
 });
