@@ -20,19 +20,13 @@ app.get("/", function(req, res) {
   res.send("Hello World!");
 });
 
-app.post("/slackEntry", function(req, res) {
-  console.log("we have entered into the slack entry.", req.body);
-});
-
 app.post("/event", function(req, res) {
-  console.log("we have entered into the slack entry.", req.body);
   const slackEventDetails = req.body;
   if (
     slackEventDetails.event &&
     slackEventDetails.event.user &&
     !(slackEventDetails.event.user in slackState)
   ) {
-    console.log("slack state beforehand", slackState);
     slackState[slackEventDetails.event.user] = {
       state: 0
     };
