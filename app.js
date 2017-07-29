@@ -22,6 +22,7 @@ app.get("/", function(req, res) {
 
 app.post("/event", function(req, res) {
   const slackEventDetails = req.body;
+  console.log("event details", slackEventDetails);
   if (
     slackEventDetails.event &&
     slackEventDetails.event.user &&
