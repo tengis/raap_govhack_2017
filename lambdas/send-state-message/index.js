@@ -194,26 +194,9 @@ function generateQuestionPrompt(state, user) {
   return [baseTemplate];
 }
 
-function generateClosingTemplate(user) {
-  let baseTemplate = {
-    fallback: "You don't know what to do?",
-    callback_id: user,
-    color: "#65f442",
-    attachment_type: "default",
-    text:
-      "Congratulations " +
-      user +
-      " you are eligable to export under the European Union Cattle Accreditation Scheme! I hope i was helpful  :relieved:"
-  };
-}
-
 function postInteractiveStateMessage(state, user, channel, text) {
-  if (possibleStates[state].nextState === "done") {
-    return slackApi.postMessage(text, channel, generateClosingTemplate(user));
-  } else {
-    const baseTemplate = generateQuestionPrompt(state, user);
-    return slackApi.postMessage(text, channel, baseTemplate);
-  }
+  const baseTemplate = generateQuestionPrompt(state, user);
+  return slackApi.postMessage(text, channel, baseTemplate);
 }
 
 function updatePreviousState(previousState, value) {
