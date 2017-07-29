@@ -30,8 +30,9 @@ app.post("/event", function(req, res) {
   if (
     slackEventDetails.event &&
     slackEventDetails.event.user &&
-    !slackEventDetails.event.user
+    !(slackEventDetails.event.user in slackState)
   ) {
+    console.log("slack state beforehand", slackState);
     slackState[slackEventDetails.event.user] = {
       state: 0
     };
