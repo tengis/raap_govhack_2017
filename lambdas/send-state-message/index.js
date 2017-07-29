@@ -20,7 +20,7 @@ const possibleStates = {
   },
   1: {
     stateGroup: "accreditation",
-    text: "Do you have the proper accreditation as a feedlot?",
+    text: "Do you have the proper accreditation to operate as a feedlot?",
     optionType: "twoChoice",
     optionName: "feedlotAcred",
     checkList: "Feedlot accreditation",
@@ -35,7 +35,7 @@ const possibleStates = {
   },
   2: {
     stateGroup: "accreditation",
-    text: "Do you have the proper accreditation as a sale yard?",
+    text: "Do you have the proper accreditation to operate as a sale yard?",
     optionType: "twoChoice",
     optionName: "saleYardAcred",
     checkList: "Saleyard accreditation",
@@ -97,8 +97,8 @@ const possibleStates = {
     stateGroup: "schedulingTime",
     text: "Have you provided atleast 2 weeks notice?",
     optionType: "twoChoice",
-    optionName: "saleYardAcred",
-    checkList: "Saleyard accreditation",
+    optionName: "scheduleNotice",
+    checkList: "Enough scheduled notice",
     validateResponse: value => {
       if (value === "yes") {
         return true;
@@ -111,7 +111,7 @@ const possibleStates = {
   10: {
     stateGroup: "done",
     text:
-      "Congratulations you are eligable to export under the European Union Cattle Accreditation Scheme!",
+      "Congratulations you are eligable to export under the European Union Cattle Accreditation Scheme! :bowtie:",
     optionType: "done",
     optionName: "done",
     checkList: "Done!",
