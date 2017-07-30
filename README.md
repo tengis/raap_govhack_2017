@@ -10,9 +10,11 @@ https://www.beefy.space/demo
 
 #### Launching the demos
 
-##### Slack
+##### Slack 
 
-Sign up through slack and start the demo with the slash command /start
+Down the bottom of the landing page click on the slack link to signup to the demo channel.
+
+Launch the demo with the slash command /start
 
 ##### WebApp
 
