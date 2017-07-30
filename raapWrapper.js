@@ -15,7 +15,7 @@ const getToken = () => {
   return rp(opt);
 };
 
-const callReasoner = (payload, token = TOKEN) => {
+const callReasoner = (payload, token) => {
   const uri = "/api/v0/domain/export-control/reasoning/reason";
   const opt = {
     url: `${BASE_URL}${uri}`,

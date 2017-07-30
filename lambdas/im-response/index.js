@@ -10,11 +10,12 @@ process.env.TZ = "Australia/Sydney";
 function determineCommand(text, details) {
   return new Promise((resolve, reject) => {
     console.log("here is the text to parse?", text);
-    if (text.indexOf("sell") > -1) {
-      resolve();
-    } else {
-      reject();
-    }
+    resolve();
+    // if (text.indexOf("demo") > -1) {
+    //   resolve();
+    // } else {
+    //   reject();
+    // }
   });
 }
 

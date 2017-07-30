@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const slackApi = require("./slackApiWrapers");
 const queryString = require("querystring");
+const raap = require("./raapWrapper");
 
 const possibleStates = {
   0: {
@@ -9,6 +10,13 @@ const possibleStates = {
     optionType: "twoChoice",
     optionName: "farmAcred",
     checkList: "Farm accreditation",
+    contributingFactor: {
+      Secretary: {
+        Accredit: {
+          Farm: true
+        }
+      }
+    },
     validateResponse: value => {
       if (value === "yes") {
         return true;
@@ -24,6 +32,7 @@ const possibleStates = {
     optionType: "twoChoice",
     optionName: "feedlotAcred",
     checkList: "Feedlot accreditation",
+    contributingFactor: "Secretary.Accredit.Feedlot",
     validateResponse: value => {
       if (value === "yes") {
         return true;
@@ -39,6 +48,7 @@ const possibleStates = {
     optionType: "twoChoice",
     optionName: "saleYardAcred",
     checkList: "Saleyard accreditation",
+    contributingFactor: "Secretary.Accredit.Saleyard",
     validateResponse: value => {
       if (value === "yes") {
         return true;
@@ -54,6 +64,7 @@ const possibleStates = {
     optionType: "twoChoice",
     optionName: "bovineCalf",
     checkList: "Bovine calf",
+    contributingFactor: "Bovine.calf",
     validateResponse: value => {
       if (value === "yes") {
         return true;
@@ -65,10 +76,12 @@ const possibleStates = {
   },
   4: {
     stateGroup: "animalDetails",
-    text: "What is the dressed weight of your animal?",
+    text:
+      "What is the dressed weight of your animal? (Valid weight 300-350 kgs)",
     optionType: "multiSelectWeight",
     optionName: "dressedWeight",
     checkList: "Dressed weight",
+    contributingFactor: "weight.Dressed",
     validateResponse: weight => {
       if (weight === "300-350") {
         return true;
@@ -80,10 +93,11 @@ const possibleStates = {
   },
   5: {
     stateGroup: "animalDetails",
-    text: "What is the live weight of your animal?",
+    text: "What is the live weight of your animal? (Valid weight 300-350 kgs)",
     optionType: "multiSelectWeight",
     optionName: "liveWeight",
     checkList: "Live weight",
+    contributingFactor: "weight.Live",
     validateResponse: weight => {
       if (weight === "300-350") {
         return true;
@@ -98,7 +112,7 @@ const possibleStates = {
     text: "Have you provided atleast 2 weeks notice?",
     optionType: "twoChoice",
     optionName: "scheduleNotice",
-    checkList: "Enough scheduled notice",
+    checkList: "sufficient scheduled notice",
     validateResponse: value => {
       if (value === "yes") {
         return true;
@@ -110,8 +124,10 @@ const possibleStates = {
   },
   10: {
     stateGroup: "done",
-    text:
-      "Congratulations you are eligable to export under the European Union Cattle Accreditation Scheme! :bowtie:",
+    text: `
+    Congratulations you are eligible to export under the European Union Cattle Accreditation Scheme! :bowtie: \n
+Please print and fill out the following form and return it to the government: https://ablis.business.gov.au/AG/resource/AP242.pdf
+    `,
     optionType: "done",
     optionName: "done",
     checkList: "Done!",
@@ -216,41 +232,49 @@ function updatePreviousState(previousState, value) {
   }
 }
 
+function determineValidRaapState() {}
+
 function postErrorStateMessage(state, user, channel) {
   const errorTemplate = {
     fallback: "You don't know what to do?",
     callback_id: user + ":done:done",
     color: "#f44141",
     attachment_type: "default",
-    text:
-      "Sorry unfortunatley you require this accreditation. \n\nPlease view here for details to apply:\n  https://ablis.business.gov.au/AG/resource/AP242.pdf "
+    text: `
+    Looks like your are currently not eligible to apply for the EUCAS Accreditation, for more information on the scheme, please visit this page:\n https://www.mla.com.au/globalassets/mla-corporate/blocks/research-and-development/34007_mla_eu-cattle-tt_vfa2_webv2.pdf
+    `
   };
-
-  const furtherInformation = {
-    color: "#f4bb41",
-    fallback: "You don't know what to do?",
-    callback_id: user + ":done:done",
-    attachment_type: "default",
-    text:
-      "For an overview and further details please see the following : \n https://www.mla.com.au/globalassets/mla-corporate/blocks/research-and-development/34007_mla_eu-cattle-tt_vfa2_webv2.pdf "
-  };
-  return slackApi.postMessage("", channel, [errorTemplate, furtherInformation]);
+  return slackApi.postMessage("", channel, [errorTemplate]);
 }
 
-exports.handler = (event, context, callback) => {
-  slackApi.setBotToken(process.env.BOT_TOKEN);
-  if (event.state === 0 && event.channel_id) {
-    postInteractiveStateMessage(
-      0,
-      event.user_name,
-      event.channel_id,
-      "Hey " +
-        event.user_name +
-        " Looks like you may be eligible for the EUCAS Accreditation which will allow you to export your cattle to the EU."
-    ).then(() => {
-      callback();
-    });
-  } else {
+function generateGreetingMessage(username) {
+  return `Congratulations! You may be eligible for the EUCAS Accreditation which will allow you to export your cattle to the EU. \n\nFor an overview of the scheme check out this page here: \nhttps://www.mla.com.au/globalassets/mla-corporate/blocks/research-and-development/34007_mla_eu-cattle-tt_vfa2_webv2.pdf
+\n\nAnswer some of the questions below to check your eligibility.`;
+}
+
+function determineConculsionMet(model) {
+  return new Promise((resolve, reject) => {
+    resolve();
+    // raap
+    //   .getToken()
+    //   .then(token => {
+    //     raap.checkConculsion(token);
+    //   })
+    //   .then(response => {
+    //     let parsed = response.ExportIsAllowed;
+    //     console.log("here is our parsed response", parsed);
+    //     resolve();
+    //   });
+  });
+}
+
+function constructCurrentModel(responseValue, previousState, currentState) {
+  let baseSchema = raap.isExportAllowedRequirements;
+  return baseSchema;
+}
+
+function determineNextStateQuestion(event, callback) {
+  return new Promise((resolve, reject) => {
     const payLoadSections = event.callback_id.split(":");
     if (payLoadSections.length === 1) {
       callback();
@@ -299,5 +323,28 @@ exports.handler = (event, context, callback) => {
           callback();
         });
     }
+  });
+}
+
+exports.handler = (event, context, callback) => {
+  slackApi.setBotToken(process.env.BOT_TOKEN);
+  if (event.state === 0 && event.channel_id) {
+    postInteractiveStateMessage(
+      0,
+      event.user_name,
+      event.channel_id,
+      generateGreetingMessage(event.user_name)
+    ).then(() => {
+      callback();
+    });
+  } else {
+    const payLoadSections = event.callback_id.split(":");
+    const previousState = payLoadSections[1];
+    const nextState = payLoadSections[2];
+    const responseValue = event.actions[0];
+
+    determineConculsionMet(
+      constructCurrentModel(responseValue, previousState, nextState)
+    ).then(() => determineNextStateQuestion(event, callback));
   }
 };
