@@ -2,10 +2,11 @@
 
 #### Contents
 
+Landing Page
+https://www.beefy.space
 
-[Landing page]: https://www.beefy.space
-
-[Web app demo]: https://www.beefy.space/demo
+WebApp Demo
+https://www.beefy.space/demo
 
 #### Launching the demos
 
