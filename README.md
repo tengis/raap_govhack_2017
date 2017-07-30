@@ -8,11 +8,12 @@ http://www.beefy.space
 WebApp Demo
 http://www.beefy.space/demo
 
-#### Launching the demos
+#### Demo links 
+
+On the header of the landing page will contain the links to the relevant platforms
+
 
 ##### Slack 
-
-Down the bottom of the landing page click on the slack link to signup to the demo channel.
 
 Launch the demo with the slash command /start
 
