@@ -49,7 +49,6 @@ const callReasoner = (payload, token) => {
       Authorization: "Bearer " + token.replace(/['"]+/g, "")
     }
   };
-  console.log("here is our opt?", opt);
   return rp(opt);
 };
 
@@ -60,20 +59,26 @@ const checkConculsion = token => {
         calf: true
       }
     }
-    // "Date.renewalNoticeGivenToPropertyManager" : true,
-    // "Date.today": true,
-    // "Secretary.Accredit.Farm": true,
-    // "Secretary.Accredit.Feedlot": true,
-    // "Secretary.Accredit.Saleyard": true,
-    // "Secretary.accreditPropertyRenew": true,
-    // "Secretary.enterPropertyOnRegister": true,
-    // "meatAndMeatProducts.AreForExportToEuropeanUnion": true,
-    // "weight.Dressed": 300,
-    // "weight.Live": 400
   };
 
   return callReasoner(requiredOutcomes, token);
 };
+
+const fullRequirementsList = token => {
+  const uri = "/api/v0/domain/export-control/reasoning/input-atoms";
+  const opt = {
+    url: `${BASE_URL}${uri}`,
+    method: "GET",
+    body: payload,
+    json: true,
+    headers: {
+      Authorization: "Bearer " + token.replace(/['"]+/g, "")
+    }
+  };
+  return rp(opt);
+};
+
+const prettyFiRequirements = requirements => {};
 
 module.exports = {
   getToken,
