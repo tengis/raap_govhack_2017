@@ -69,7 +69,6 @@ const fullRequirementsList = token => {
   const opt = {
     url: `${BASE_URL}${uri}`,
     method: "GET",
-    body: payload,
     json: true,
     headers: {
       Authorization: "Bearer " + token.replace(/['"]+/g, "")
@@ -78,11 +77,96 @@ const fullRequirementsList = token => {
   return rp(opt);
 };
 
-const prettyFiRequirements = requirements => {};
+const convertCamelCase = camelCased => {
+  return camelCased.replace(/([A-Z])/g, " $1").replace(/^./, str => {
+    return str.toLowerCase();
+  });
+};
+
+const prettyFiRequirements = (requirements, desiredRequirement) => {
+  let mappedScentences = [];
+  let desired = requirements.filter(requirement => {
+    if (
+      requirement &&
+      requirement.goal &&
+      requirement.goal.booleanGoal &&
+      requirement.goal.booleanGoal.boolRef &&
+      requirement.goal.booleanGoal.boolRef
+        .toLowerCase()
+        .indexOf(desiredRequirement.toLowerCase()) > -1
+    ) {
+      return requirement;
+    }
+  });
+
+  if (desired.length) {
+    console.log(desired[0]);
+    mappedScentences = desired[0].contributingAtoms.map(atom => {
+      console.log(atom);
+
+      let splitAtom = atom.split(".");
+
+      console.log("here is our split atom", splitAtom);
+      console.log(splitAtom[1]);
+
+      switch (splitAtom[0]) {
+        case "Bovine":
+          return "Your bovine will need to be a " + splitAtom[1];
+          break;
+        case "Date":
+          return (
+            "You will need to provide the date for your " +
+            convertCamelCase(splitAtom[1])
+          );
+          break;
+        case "Secretary":
+          if (splitAtom.length == 3) {
+            return (
+              "You will need to ensure you are an accredited" +
+              convertCamelCase(splitAtom[2])
+            );
+          } else {
+            return (
+              "You will need to ensure you are able to " +
+              convertCamelCase(splitAtom[1])
+            );
+          }
+          break;
+        case "meatAndMeatProducts":
+          return "Please ensure you are eligable to export to the European Union";
+          break;
+        case "weight":
+          return (
+            "Please check your animal has a valid " +
+            splitAtom[1].toLowerCase() +
+            " weight"
+          );
+          break;
+        default:
+          break;
+      }
+    });
+  }
+  return mappedScentences;
+};
+
+function testRun() {
+  return getToken()
+    .then(token => fullRequirementsList(token))
+    .then(requirements => {
+      return prettyFiRequirements(requirements, "ExportIsAllowed");
+    });
+}
 
 module.exports = {
   getToken,
   callReasoner,
   checkConculsion,
-  isExportAllowedRequirements
+  isExportAllowedRequirements,
+  fullRequirementsList,
+  prettyFiRequirements
 };
+
+// testRun().then(result => {
+//   console.log("our final test results", result);
+// });
