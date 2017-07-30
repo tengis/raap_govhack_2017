@@ -2,16 +2,20 @@
 
 #### Contents
 
+Landing Page
+http://www.beefy.space
 
-[Landing page]: https://www.beefy.space
+WebApp Demo
+http://www.beefy.space/demo
 
-[Web app demo]: https://www.beefy.space/demo
+#### Demo links 
 
-#### Launching the demos
+On the header of the landing page will contain the links to the relevant platforms
 
-##### Slack
 
-Sign up through slack and start the demo with the slash command /start
+##### Slack 
+
+Launch the demo with the slash command /start
 
 ##### WebApp
 
