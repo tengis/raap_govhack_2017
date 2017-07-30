@@ -3,10 +3,10 @@
 #### Contents
 
 Landing Page
-https://www.beefy.space
+http://www.beefy.space
 
 WebApp Demo
-https://www.beefy.space/demo
+http://www.beefy.space/demo
 
 #### Launching the demos
 
