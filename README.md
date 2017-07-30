@@ -15,7 +15,7 @@ On the header of the landing page will contain the links to the relevant platfor
 
 ##### Slack 
 
-Launch the demo with the slash command /start
+Launch the demo with the slash command /start in any channel ( maybe the demo_channel :) )
 
 ##### WebApp
 
